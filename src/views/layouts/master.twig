@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="{{ store.locale }}" dir="{{ store.locale == 'ar' ? 'rtl' : 'ltr' }}">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    
+    {# SEO Meta Tags #}
+    <title>{% block title %}{{ page.title ? page.title ~ ' - ' : '' }}{{ store.name }}{% endblock %}</title>
+    <meta name="description" content="{% block description %}{{ page.description|default(store.description) }}{% endblock %}">
+    <meta name="keywords" content="{% block keywords %}{{ store.keywords }}{% endblock %}">
+    
+    {# Open Graph Meta Tags #}
+    <meta property="og:title" content="{% block og_title %}{{ page.title|default(store.name) }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ page.description|default(store.description) }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ store.logo }}{% endblock %}">
+    <meta property="og:url" content="{{ app.request.uri }}">
+    <meta property="og:type" content="{% block og_type %}website{% endblock %}">
+    <meta property="og:site_name" content="{{ store.name }}">
+    
+    {# Twitter Card Meta Tags #}
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{% block twitter_title %}{{ page.title|default(store.name) }}{% endblock %}">
+    <meta name="twitter:description" content="{% block twitter_description %}{{ page.description|default(store.description) }}{% endblock %}">
+    <meta name="twitter:image" content="{% block twitter_image %}{{ store.logo }}{% endblock %}">
+    
+    {# Favicon #}
+    <link rel="icon" type="image/x-icon" href="{{ store.favicon|default('/favicon.ico') }}">
+    <link rel="apple-touch-icon" href="{{ store.favicon|default('/apple-touch-icon.png') }}">
+    
+    {# Preload Critical Resources #}
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    {# Stylesheets #}
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ 'assets/styles/main.css'|asset }}">
+    {% block styles %}{% endblock %}
+    
+    {# Salla Required Styles #}
+    {{ twilight.head }}
+    
+    {# Custom CSS Variables for RTL Support #}
+    <style>
+        :root {
+            --text-direction: {{ store.locale == 'ar' ? 'rtl' : 'ltr' }};
+            --start-direction: {{ store.locale == 'ar' ? 'right' : 'left' }};
+            --end-direction: {{ store.locale == 'ar' ? 'left' : 'right' }};
+        }
+        
+        {% if store.locale == 'ar' %}
+        body {
+            font-family: 'Tajawal', 'Inter', system-ui, sans-serif;
+        }
+        {% endif %}
+    </style>
+    
+    {# Schema.org Structured Data #}
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "WebSite",
+        "name": "{{ store.name }}",
+        "url": "{{ store.url }}",
+        "description": "{{ store.description }}",
+        "potentialAction": {
+            "@type": "SearchAction",
+            "target": "{{ store.url }}/search?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+        }
+    }
+    </script>
+    
+    {% block structured_data %}{% endblock %}
+</head>
+
+<body class="{% block body_class %}{% endblock %}">
+    {# Skip to Content Link for Accessibility #}
+    <a href="#main-content" class="skip-link">{{ trans('common.skip_to_content') }}</a>
+    
+    {# Header #}
+    <header class="site-header">
+        {% include 'components.header.header' %}
+    </header>
+    
+    {# Main Content #}
+    <main id="main-content" class="main-content">
+        {% block content %}{% endblock %}
+    </main>
+    
+    {# Footer #}
+    <footer class="site-footer">
+        {% include 'components.footer.footer' %}
+    </footer>
+    
+    {# Cart Sidebar (if needed) #}
+    {% if store.settings.cart_sidebar %}
+    <div id="cart-sidebar" class="cart-sidebar">
+        <salla-cart-summary></salla-cart-summary>
+    </div>
+    {% endif %}
+    
+    {# Mobile Menu Overlay #}
+    <div id="mobile-menu-overlay" class="mobile-menu-overlay"></div>
+    
+    {# Loading Overlay #}
+    <div id="loading-overlay" class="loading-overlay d-none">
+        <div class="loading-spinner"></div>
+    </div>
+    
+    {# Notification Container #}
+    <div id="notification-container" class="notification-container"></div>
+    
+    {# Scripts #}
+    <script src="{{ 'assets/js/main.js'|asset }}" defer></script>
+    {% block scripts %}{% endblock %}
+    
+    {# Salla Required Scripts #}
+    {{ twilight.footer }}
+    
+    {# Analytics and Tracking #}
+    {% if store.google_analytics_id %}
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id={{ store.google_analytics_id }}"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', '{{ store.google_analytics_id }}');
+    </script>
+    {% endif %}
+    
+    {% if store.facebook_pixel_id %}
+    <!-- Facebook Pixel Code -->
+    <script>
+        !function(f,b,e,v,n,t,s)
+        {if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};
+        if(!f._fbq)f._fbq=n;n.push=n;n.loaded=!0;n.version='2.0';
+        n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];
+        s.parentNode.insertBefore(t,s)}(window, document,'script',
+        'https://connect.facebook.net/en_US/fbevents.js');
+        fbq('init', '{{ store.facebook_pixel_id }}');
+        fbq('track', 'PageView');
+    </script>
+    <noscript><img height="1" width="1" style="display:none"
+        src="https://www.facebook.com/tr?id={{ store.facebook_pixel_id }}&ev=PageView&noscript=1"
+    /></noscript>
+    {% endif %}
+    
+    {# Custom Footer Scripts #}
+    <script>
+        // Initialize theme functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            // Initialize mobile menu
+            const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
+            const mobileMenu = document.querySelector('.mobile-menu');
+            const mobileMenuOverlay = document.querySelector('#mobile-menu-overlay');
+            
+            if (mobileMenuToggle && mobileMenu) {
+                mobileMenuToggle.addEventListener('click', function() {
+                    mobileMenu.classList.toggle('active');
+                    mobileMenuOverlay.classList.toggle('active');
+                    document.body.classList.toggle('menu-open');
+                });
+                
+                mobileMenuOverlay.addEventListener('click', function() {
+                    mobileMenu.classList.remove('active');
+                    mobileMenuOverlay.classList.remove('active');
+                    document.body.classList.remove('menu-open');
+                });
+            }
+            
+            // Initialize search functionality
+            const searchToggle = document.querySelector('.search-toggle');
+            const searchContainer = document.querySelector('.search-container');
+            
+            if (searchToggle && searchContainer) {
+                searchToggle.addEventListener('click', function() {
+                    searchContainer.classList.toggle('active');
+                    const searchInput = searchContainer.querySelector('.search-input');
+                    if (searchInput) {
+                        searchInput.focus();
+                    }
+                });
+            }
+            
+            // Initialize scroll effects
+            let lastScrollTop = 0;
+            const header = document.querySelector('.site-header');
+            
+            window.addEventListener('scroll', function() {
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                
+                if (scrollTop > lastScrollTop && scrollTop > 100) {
+                    // Scrolling down
+                    header.classList.add('header-hidden');
+                } else {
+                    // Scrolling up
+                    header.classList.remove('header-hidden');
+                }
+                
+                if (scrollTop > 50) {
+                    header.classList.add('header-scrolled');
+                } else {
+                    header.classList.remove('header-scrolled');
+                }
+                
+                lastScrollTop = scrollTop;
+            });
+            
+            // Initialize lazy loading for images
+            if ('IntersectionObserver' in window) {
+                const imageObserver = new IntersectionObserver((entries, observer) => {
+                    entries.forEach(entry => {
+                        if (entry.isIntersecting) {
+                            const img = entry.target;
+                            img.src = img.dataset.src;
+                            img.classList.remove('lazy');
+                            imageObserver.unobserve(img);
+                        }
+                    });
+                });
+                
+                document.querySelectorAll('img[data-src]').forEach(img => {
+                    imageObserver.observe(img);
+                });
+            }
+        });
+        
+        // Utility functions
+        window.GadgetsZone = {
+            showNotification: function(message, type = 'success') {
+                const container = document.getElementById('notification-container');
+                const notification = document.createElement('div');
+                notification.className = `notification notification-${type}`;
+                notification.innerHTML = `
+                    <span class="notification-message">${message}</span>
+                    <button class="notification-close">&times;</button>
+                `;
+                
+                container.appendChild(notification);
+                
+                // Auto remove after 5 seconds
+                setTimeout(() => {
+                    notification.remove();
+                }, 5000);
+                
+                // Manual close
+                notification.querySelector('.notification-close').addEventListener('click', () => {
+                    notification.remove();
+                });
+            },
+            
+            showLoading: function() {
+                document.getElementById('loading-overlay').classList.remove('d-none');
+            },
+            
+            hideLoading: function() {
+                document.getElementById('loading-overlay').classList.add('d-none');
+            }
+        };
+    </script>
+</body>
+</html>
+

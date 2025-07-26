@@ -1,0 +1,1147 @@
+{# Checkout Page for Gadgets Zone Theme #}
+
+{% extends "layouts.master" %}
+
+{% block title %}{{ trans("checkout.checkout") }} - {{ store.name }}{% endblock %}
+
+{% block description %}{{ trans("checkout.checkout_description") }}{% endblock %}
+
+{% block body_class %}checkout-page{% endblock %}
+
+{% block content %}
+
+{# Page Header #}
+<section class="page-header">
+    <div class="container">
+        {# Breadcrumbs #}
+        <nav class="breadcrumbs" aria-label="Breadcrumb">
+            <ol class="breadcrumb-list">
+                <li class="breadcrumb-item">
+                    <a href="{{ store.url }}">{{ trans("common.home") }}</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="{{ store.url }}/cart">{{ trans("cart.shopping_cart") }}</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">
+                    {{ trans("checkout.checkout") }}
+                </li>
+            </ol>
+        </nav>
+        
+        {# Page Title #}
+        <div class="page-header-content">
+            <h1 class="page-title">{{ trans("checkout.checkout") }}</h1>
+            <p class="page-description">{{ trans("checkout.secure_payment") }}</p>
+        </div>
+    </div>
+</section>
+
+{# Checkout Content #}
+<section class="checkout-section">
+    <div class="container">
+        <div class="checkout-layout">
+            {# Checkout Steps #}
+            <div class="checkout-steps">
+                <div class="step active" data-step="1">
+                    <span class="step-number">1</span>
+                    <span class="step-title">{{ trans("checkout.shipping_address") }}</span>
+                </div>
+                <div class="step" data-step="2">
+                    <span class="step-number">2</span>
+                    <span class="step-title">{{ trans("checkout.shipping_method") }}</span>
+                </div>
+                <div class="step" data-step="3">
+                    <span class="step-number">3</span>
+                    <span class="step-title">{{ trans("checkout.payment_method") }}</span>
+                </div>
+                <div class="step" data-step="4">
+                    <span class="step-number">4</span>
+                    <span class="step-title">{{ trans("checkout.review_order") }}</span>
+                </div>
+            </div>
+
+            {# Checkout Forms #}
+            <div class="checkout-forms">
+                {# Step 1: Shipping Address #}
+                <div class="checkout-step-content active" data-step-content="1">
+                    <h2 class="form-title">{{ trans("checkout.shipping_address") }}</h2>
+                    <form id="shipping-address-form" class="checkout-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="first-name">{{ trans("checkout.first_name") }} *</label>
+                                <input type="text" id="first-name" name="first_name" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="last-name">{{ trans("checkout.last_name") }} *</label>
+                                <input type="text" id="last-name" name="last_name" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">{{ trans("checkout.email") }} *</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="phone">{{ trans("checkout.phone") }} *</label>
+                            <input type="tel" id="phone" name="phone" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="country">{{ trans("checkout.country") }} *</label>
+                            <select id="country" name="country" required>
+                                <option value="">{{ trans("checkout.select_country") }}</option>
+                                <option value="US">United States</option>
+                                <option value="CA">Canada</option>
+                                <option value="GB">United Kingdom</option>
+                                <option value="SA">Saudi Arabia</option>
+                                {# Add more countries as needed #}
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="address-line1">{{ trans("checkout.address_line1") }} *</label>
+                            <input type="text" id="address-line1" name="address_line1" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="address-line2">{{ trans("checkout.address_line2") }}</label>
+                            <input type="text" id="address-line2" name="address_line2">
+                        </div>
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="city">{{ trans("checkout.city") }} *</label>
+                                <input type="text" id="city" name="city" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="state">{{ trans("checkout.state_province") }} *</label>
+                                <input type="text" id="state" name="state" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="zip-code">{{ trans("checkout.zip_code") }} *</label>
+                            <input type="text" id="zip-code" name="zip_code" required>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="save-address" name="save_address">
+                            <label for="save-address">{{ trans("checkout.save_address") }}</label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-large next-step-btn" data-next-step="2">
+                            {{ trans("checkout.continue_to_shipping") }}
+                            <i class="icon-arrow-right"></i>
+                        </button>
+                    </form>
+                </div>
+
+                {# Step 2: Shipping Method #}
+                <div class="checkout-step-content" data-step-content="2">
+                    <h2 class="form-title">{{ trans("checkout.shipping_method") }}</h2>
+                    <form id="shipping-method-form" class="checkout-form">
+                        <div class="shipping-methods-list">
+                            <div class="shipping-method-option">
+                                <input type="radio" id="standard-shipping" name="shipping_method" value="standard" checked>
+                                <label for="standard-shipping">
+                                    <span class="method-name">{{ trans("checkout.standard_shipping") }}</span>
+                                    <span class="method-price">{{ trans("checkout.free") }}</span>
+                                    <span class="method-delivery">{{ trans("checkout.delivery_time", {"days": "5-7"}) }}</span>
+                                </label>
+                            </div>
+                            <div class="shipping-method-option">
+                                <input type="radio" id="express-shipping" name="shipping_method" value="express">
+                                <label for="express-shipping">
+                                    <span class="method-name">{{ trans("checkout.express_shipping") }}</span>
+                                    <span class="method-price">{{ "15.00"|currency }}</span>
+                                    <span class="method-delivery">{{ trans("checkout.delivery_time", {"days": "1-2"}) }}</span>
+                                </label>
+                            </div>
+                            <div class="shipping-method-option">
+                                <input type="radio" id="pickup" name="shipping_method" value="pickup">
+                                <label for="pickup">
+                                    <span class="method-name">{{ trans("checkout.store_pickup") }}</span>
+                                    <span class="method-price">{{ trans("checkout.free") }}</span>
+                                    <span class="method-delivery">{{ trans("checkout.pickup_time") }}</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary prev-step-btn" data-prev-step="1">
+                                <i class="icon-arrow-left"></i>
+                                {{ trans("checkout.back_to_address") }}
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-large next-step-btn" data-next-step="3">
+                                {{ trans("checkout.continue_to_payment") }}
+                                <i class="icon-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                {# Step 3: Payment Method #}
+                <div class="checkout-step-content" data-step-content="3">
+                    <h2 class="form-title">{{ trans("checkout.payment_method") }}</h2>
+                    <form id="payment-method-form" class="checkout-form">
+                        <div class="payment-methods-list">
+                            <div class="payment-method-option">
+                                <input type="radio" id="credit-card" name="payment_method" value="credit_card" checked>
+                                <label for="credit-card">
+                                    <span class="method-name">{{ trans("checkout.credit_debit_card") }}</span>
+                                    <div class="payment-icons">
+                                        <img src="{{ "assets/images/visa.svg"|asset }}" alt="Visa">
+                                        <img src="{{ "assets/images/mastercard.svg"|asset }}" alt="Mastercard">
+                                    </div>
+                                </label>
+                                <div class="card-details" id="card-details">
+                                    <div class="form-group">
+                                        <label for="card-number">{{ trans("checkout.card_number") }} *</label>
+                                        <input type="text" id="card-number" name="card_number" placeholder="XXXX XXXX XXXX XXXX" required>
+                                    </div>
+                                    <div class="form-row">
+                                        <div class="form-group">
+                                            <label for="expiry-date">{{ trans("checkout.expiry_date") }} *</label>
+                                            <input type="text" id="expiry-date" name="expiry_date" placeholder="MM/YY" required>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="cvv">{{ trans("checkout.cvv") }} *</label>
+                                            <input type="text" id="cvv" name="cvv" placeholder="XXX" required>
+                                        </div>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="card-name">{{ trans("checkout.name_on_card") }} *</label>
+                                        <input type="text" id="card-name" name="card_name" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="payment-method-option">
+                                <input type="radio" id="paypal" name="payment_method" value="paypal">
+                                <label for="paypal">
+                                    <span class="method-name">PayPal</span>
+                                    <img src="{{ "assets/images/paypal.svg"|asset }}" alt="PayPal" class="payment-icon">
+                                </label>
+                            </div>
+                            <div class="payment-method-option">
+                                <input type="radio" id="apple-pay" name="payment_method" value="apple_pay">
+                                <label for="apple-pay">
+                                    <span class="method-name">Apple Pay</span>
+                                    <img src="{{ "assets/images/apple-pay.svg"|asset }}" alt="Apple Pay" class="payment-icon">
+                                </label>
+                            </div>
+                            <div class="payment-method-option">
+                                <input type="radio" id="cash-on-delivery" name="payment_method" value="cash_on_delivery">
+                                <label for="cash-on-delivery">
+                                    <span class="method-name">{{ trans("checkout.cash_on_delivery") }}</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-actions">
+                            <button type="button" class="btn btn-secondary prev-step-btn" data-prev-step="2">
+                                <i class="icon-arrow-left"></i>
+                                {{ trans("checkout.back_to_shipping") }}
+                            </button>
+                            <button type="submit" class="btn btn-primary btn-large next-step-btn" data-next-step="4">
+                                {{ trans("checkout.review_order") }}
+                                <i class="icon-arrow-right"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+
+                {# Step 4: Review Order #}
+                <div class="checkout-step-content" data-step-content="4">
+                    <h2 class="form-title">{{ trans("checkout.review_order") }}</h2>
+                    <div class="order-review-summary">
+                        <div class="summary-section">
+                            <h3>{{ trans("checkout.shipping_details") }}</h3>
+                            <p id="review-shipping-address"></p>
+                            <p id="review-shipping-method"></p>
+                            <button type="button" class="edit-section-btn" data-edit-step="1">{{ trans("common.edit") }}</button>
+                        </div>
+                        <div class="summary-section">
+                            <h3>{{ trans("checkout.payment_details") }}</h3>
+                            <p id="review-payment-method"></p>
+                            <button type="button" class="edit-section-btn" data-edit-step="3">{{ trans("common.edit") }}</button>
+                        </div>
+                        <div class="summary-section">
+                            <h3>{{ trans("checkout.items_in_order") }}</h3>
+                            <div class="review-items-list">
+                                {# Items will be populated by JavaScript #}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order-summary-card">
+                        <h3 class="summary-title">{{ trans("cart.order_summary") }}</h3>
+                        <div class="summary-details">
+                            <div class="summary-row">
+                                <span class="summary-label">{{ trans("cart.subtotal") }}</span>
+                                <span class="summary-value" id="review-subtotal"></span>
+                            </div>
+                            <div class="summary-row discount">
+                                <span class="summary-label">{{ trans("cart.discount") }}</span>
+                                <span class="summary-value" id="review-discount"></span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">{{ trans("cart.shipping") }}</span>
+                                <span class="summary-value" id="review-shipping"></span>
+                            </div>
+                            <div class="summary-row">
+                                <span class="summary-label">{{ trans("cart.tax") }}</span>
+                                <span class="summary-value" id="review-tax"></span>
+                            </div>
+                            <div class="summary-row total">
+                                <span class="summary-label">{{ trans("cart.total") }}</span>
+                                <span class="summary-value" id="review-total"></span>
+                            </div>
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="terms-agree" name="terms_agree" required>
+                            <label for="terms-agree">{{ trans("checkout.agree_to_terms") }} <a href="/terms-conditions" target="_blank">{{ trans("common.terms_conditions") }}</a></label>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-large place-order-btn">
+                            {{ trans("checkout.place_order") }}
+                            <i class="icon-check-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            {# Order Summary (Sticky) #}
+            <div class="checkout-order-summary">
+                <div class="summary-card">
+                    <h3 class="summary-title">{{ trans("cart.order_summary") }}</h3>
+                    <div class="summary-details">
+                        <div class="summary-row">
+                            <span class="summary-label">{{ trans("cart.subtotal") }}</span>
+                            <span class="summary-value" id="order-summary-subtotal">{{ cart.subtotal|currency }}</span>
+                        </div>
+                        <div class="summary-row discount">
+                            <span class="summary-label">{{ trans("cart.discount") }}</span>
+                            <span class="summary-value" id="order-summary-discount">-{{ cart.discount|currency }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">{{ trans("cart.shipping") }}</span>
+                            <span class="summary-value" id="order-summary-shipping">{{ cart.shipping_cost|currency }}</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">{{ trans("cart.tax") }}</span>
+                            <span class="summary-value" id="order-summary-tax">{{ cart.tax|currency }}</span>
+                        </div>
+                        <div class="summary-row total">
+                            <span class="summary-label">{{ trans("cart.total") }}</span>
+                            <span class="summary-value" id="order-summary-total">{{ cart.total|currency }}</span>
+                        </div>
+                    </div>
+                    <div class="checkout-items-preview">
+                        {% for item in cart.items %}
+                            <div class="preview-item">
+                                <div class="item-image">
+                                    <img src="{{ item.product.image }}" alt="{{ item.product.name }}">
+                                </div>
+                                <div class="item-info">
+                                    <span class="item-name">{{ item.product.name }}</span>
+                                    <span class="item-quantity">x{{ item.quantity }}</span>
+                                </div>
+                                <span class="item-price">{{ (item.price * item.quantity)|currency }}</span>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ "assets/styles/components.css"|asset }}">
+<style>
+/* Checkout Page Styles */
+
+.checkout-section {
+    padding: 3rem 0;
+}
+
+.checkout-layout {
+    display: grid;
+    grid-template-columns: 2fr 1fr;
+    gap: 3rem;
+    align-items: start;
+}
+
+.checkout-steps {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 2rem;
+    background: white;
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+}
+
+.checkout-steps .step {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--text-muted);
+    font-weight: var(--font-weight-medium);
+    position: relative;
+}
+
+.checkout-steps .step:not(:last-child)::after {
+    content: ">";
+    position: absolute;
+    right: -1.5rem;
+    color: var(--border-color);
+}
+
+.checkout-steps .step.active {
+    color: var(--primary-color);
+}
+
+.checkout-steps .step-number {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    background: var(--background-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: var(--font-weight-bold);
+    color: var(--text-color);
+}
+
+.checkout-steps .step.active .step-number {
+    background: var(--primary-color);
+    color: white;
+}
+
+.checkout-forms {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    padding: 2rem;
+}
+
+.checkout-step-content {
+    display: none;
+}
+
+.checkout-step-content.active {
+    display: block;
+}
+
+.form-title {
+    font-size: 1.5rem;
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+
+.checkout-form .form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+}
+
+.checkout-form .form-group {
+    margin-bottom: 1.5rem;
+}
+
+.checkout-form .form-group label {
+    display: block;
+    font-weight: var(--font-weight-medium);
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.checkout-form .form-group input,
+.checkout-form .form-group select,
+.checkout-form .form-group textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border-color);
+    border-radius: var(--border-radius);
+    font-size: 1rem;
+    transition: var(--transition);
+}
+
+.checkout-form .form-group input:focus,
+.checkout-form .form-group select:focus,
+.checkout-form .form-group textarea:focus {
+    outline: none;
+    border-color: var(--primary-color);
+}
+
+.checkout-form .form-group.checkbox-group {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+}
+
+.checkout-form .form-group.checkbox-group input[type="checkbox"] {
+    width: auto;
+    margin: 0;
+}
+
+.checkout-form .form-group.checkbox-group label {
+    margin: 0;
+    font-weight: normal;
+}
+
+.shipping-methods-list,
+.payment-methods-list {
+    margin-bottom: 2rem;
+}
+
+.shipping-method-option,
+.payment-method-option {
+    background: var(--background-light);
+    border-radius: var(--border-radius);
+    padding: 1.25rem;
+    margin-bottom: 1rem;
+    border: 2px solid transparent;
+    transition: var(--transition);
+}
+
+.shipping-method-option:has(input:checked),
+.payment-method-option:has(input:checked) {
+    border-color: var(--primary-color);
+    background: rgba(255, 140, 0, 0.05);
+}
+
+.shipping-method-option label,
+.payment-method-option label {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    cursor: pointer;
+    font-weight: var(--font-weight-medium);
+    color: var(--text-color);
+}
+
+.shipping-method-option input,
+.payment-method-option input {
+    margin-right: 1rem;
+    width: auto;
+}
+
+.shipping-method-option .method-name,
+.payment-method-option .method-name {
+    flex: 1;
+}
+
+.shipping-method-option .method-price,
+.payment-method-option .method-price {
+    font-weight: var(--font-weight-bold);
+    color: var(--primary-color);
+}
+
+.shipping-method-option .method-delivery {
+    font-size: 0.875rem;
+    color: var(--text-light);
+    margin-left: 1rem;
+}
+
+.payment-method-option .payment-icons {
+    display: flex;
+    gap: 0.5rem;
+    margin-left: 1rem;
+}
+
+.payment-method-option .payment-icon {
+    height: 20px;
+    width: auto;
+}
+
+.card-details {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.form-actions {
+    display: flex;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
+.form-actions .btn {
+    flex: 1;
+}
+
+.order-review-summary {
+    margin-bottom: 2rem;
+}
+
+.summary-section {
+    background: var(--background-light);
+    padding: 1.5rem;
+    border-radius: var(--border-radius);
+    margin-bottom: 1.5rem;
+    position: relative;
+}
+
+.summary-section h3 {
+    font-size: 1.125rem;
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.summary-section p {
+    color: var(--text-light);
+    line-height: 1.6;
+    margin-bottom: 0.5rem;
+}
+
+.edit-section-btn {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+    background: none;
+    border: none;
+    color: var(--primary-color);
+    cursor: pointer;
+    font-weight: var(--font-weight-medium);
+    transition: var(--transition);
+}
+
+.edit-section-btn:hover {
+    text-decoration: underline;
+}
+
+.review-items-list {
+    border-top: 1px solid var(--border-color);
+    padding-top: 1rem;
+}
+
+.review-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.review-item .item-image {
+    width: 60px;
+    height: 60px;
+    border-radius: var(--border-radius-small);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.review-item .item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.review-item .item-info {
+    flex-grow: 1;
+}
+
+.review-item .item-name {
+    font-weight: var(--font-weight-medium);
+    color: var(--text-color);
+    display: block;
+}
+
+.review-item .item-quantity {
+    font-size: 0.875rem;
+    color: var(--text-light);
+}
+
+.review-item .item-price {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-color);
+}
+
+.order-summary-card {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    padding: 2rem;
+}
+
+.order-summary-card .summary-title {
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: 1.5rem;
+    color: var(--text-color);
+}
+
+.order-summary-card .summary-details {
+    margin-bottom: 1.5rem;
+}
+
+.order-summary-card .summary-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.75rem 0;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.order-summary-card .summary-row:last-child {
+    border-bottom: none;
+}
+
+.order-summary-card .summary-row.total {
+    font-size: 1.125rem;
+    font-weight: var(--font-weight-bold);
+    padding-top: 1rem;
+    border-top: 2px solid var(--border-color);
+    margin-top: 0.5rem;
+}
+
+.order-summary-card .summary-row.total .summary-value {
+    color: #28a745;
+    font-size: 1.25rem;
+}
+
+.order-summary-card .summary-label {
+    color: var(--text-color);
+}
+
+.order-summary-card .summary-value {
+    font-weight: var(--font-weight-medium);
+    color: var(--text-color);
+}
+
+.place-order-btn {
+    width: 100%;
+}
+
+.checkout-order-summary {
+    position: sticky;
+    top: 100px;
+}
+
+.checkout-items-preview {
+    margin-top: 1.5rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.checkout-items-preview .preview-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.checkout-items-preview .item-image {
+    width: 40px;
+    height: 40px;
+    border-radius: var(--border-radius-small);
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.checkout-items-preview .item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.checkout-items-preview .item-info {
+    flex-grow: 1;
+}
+
+.checkout-items-preview .item-name {
+    font-size: 0.9rem;
+    color: var(--text-color);
+    display: block;
+}
+
+.checkout-items-preview .item-quantity {
+    font-size: 0.8rem;
+    color: var(--text-light);
+}
+
+.checkout-items-preview .item-price {
+    font-weight: var(--font-weight-semibold);
+    color: var(--text-color);
+    font-size: 0.9rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1024px) {
+    .checkout-layout {
+        grid-template-columns: 1.5fr 1fr;
+        gap: 2rem;
+    }
+    
+    .checkout-steps .step-title {
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .checkout-layout {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+    }
+    
+    .checkout-steps {
+        flex-wrap: wrap;
+        justify-content: center;
+        gap: 1rem;
+        padding: 1rem;
+    }
+    
+    .checkout-steps .step {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+    }
+    
+    .checkout-steps .step:not(:last-child)::after {
+        display: none;
+    }
+    
+    .checkout-forms,
+    .order-summary-card {
+        padding: 1.5rem;
+    }
+    
+    .checkout-form .form-row {
+        grid-template-columns: 1fr;
+    }
+    
+    .form-actions {
+        flex-direction: column-reverse;
+    }
+    
+    .checkout-order-summary {
+        position: static;
+        order: -1;
+    }
+}
+
+@media (max-width: 576px) {
+    .checkout-section {
+        padding: 2rem 0;
+    }
+    
+    .checkout-forms {
+        padding: 1rem;
+    }
+    
+    .order-summary-card {
+        padding: 1rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const steps = document.querySelectorAll(".checkout-steps .step");
+    const stepContents = document.querySelectorAll(".checkout-step-content");
+    const nextButtons = document.querySelectorAll(".next-step-btn");
+    const prevButtons = document.querySelectorAll(".prev-step-btn");
+    const editButtons = document.querySelectorAll(".edit-section-btn");
+    const paymentMethodRadios = document.querySelectorAll("input[name=\"payment_method\"]");
+    const cardDetailsDiv = document.getElementById("card-details");
+
+    let currentStep = 1;
+
+    function showStep(stepNumber) {
+        steps.forEach(step => {
+            step.classList.remove("active");
+            if (parseInt(step.dataset.step) <= stepNumber) {
+                step.classList.add("active");
+            }
+        });
+
+        stepContents.forEach(content => {
+            content.classList.remove("active");
+            if (parseInt(content.dataset.stepContent) === stepNumber) {
+                content.classList.add("active");
+            }
+        });
+        currentStep = stepNumber;
+        window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function validateForm(formId) {
+        const form = document.getElementById(formId);
+        if (!form) return true; // No form to validate
+        
+        const inputs = form.querySelectorAll("input[required], select[required], textarea[required]");
+        let isValid = true;
+        inputs.forEach(input => {
+            if (!input.value.trim()) {
+                isValid = false;
+                input.classList.add("is-invalid");
+            } else {
+                input.classList.remove("is-invalid");
+            }
+        });
+        
+        // Specific validation for email
+        const emailInput = form.querySelector("input[type=\"email\"]");
+        if (emailInput && !/^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/.test(emailInput.value)) {
+            isValid = false;
+            emailInput.classList.add("is-invalid");
+        }
+
+        // Specific validation for credit card details if selected
+        const creditCardRadio = document.getElementById("credit-card");
+        if (creditCardRadio && creditCardRadio.checked) {
+            const cardNumber = document.getElementById("card-number");
+            const expiryDate = document.getElementById("expiry-date");
+            const cvv = document.getElementById("cvv");
+            const cardName = document.getElementById("card-name");
+
+            if (!/^[0-9]{13,16}$/.test(cardNumber.value.replace(/\s/g, ""))) {
+                isValid = false; cardNumber.classList.add("is-invalid");
+            } else { cardNumber.classList.remove("is-invalid"); }
+            if (!/^(0[1-9]|1[0-2])\/([0-9]{2})$/.test(expiryDate.value)) {
+                isValid = false; expiryDate.classList.add("is-invalid");
+            } else { expiryDate.classList.remove("is-invalid"); }
+            if (!/^[0-9]{3,4}$/.test(cvv.value)) {
+                isValid = false; cvv.classList.add("is-invalid");
+            } else { cvv.classList.remove("is-invalid"); }
+            if (!cardName.value.trim()) {
+                isValid = false; cardName.classList.add("is-invalid");
+            } else { cardName.classList.remove("is-invalid"); }
+        }
+
+        if (!isValid) {
+            GadgetsZone.showNotification("Please fill in all required fields correctly.", "error");
+        }
+        return isValid;
+    }
+
+    nextButtons.forEach(button => {
+        button.addEventListener("click", function(e) {
+            e.preventDefault();
+            const formId = this.closest("form").id;
+            if (validateForm(formId)) {
+                const nextStep = parseInt(this.dataset.nextStep);
+                updateReviewSummary();
+                showStep(nextStep);
+            }
+        });
+    });
+
+    prevButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const prevStep = parseInt(this.dataset.prevStep);
+            showStep(prevStep);
+        });
+    });
+
+    editButtons.forEach(button => {
+        button.addEventListener("click", function() {
+            const editStep = parseInt(this.dataset.editStep);
+            showStep(editStep);
+        });
+    });
+
+    paymentMethodRadios.forEach(radio => {
+        radio.addEventListener("change", function() {
+            if (this.value === "credit_card") {
+                cardDetailsDiv.style.display = "block";
+            } else {
+                cardDetailsDiv.style.display = "none";
+            }
+        });
+    });
+
+    // Initial state for card details
+    if (document.getElementById("credit-card") && !document.getElementById("credit-card").checked) {
+        cardDetailsDiv.style.display = "none";
+    }
+
+    // Place Order Button
+    const placeOrderBtn = document.querySelector(".place-order-btn");
+    if (placeOrderBtn) {
+        placeOrderBtn.addEventListener("click", function(e) {
+            e.preventDefault();
+            const termsAgree = document.getElementById("terms-agree");
+            if (!termsAgree.checked) {
+                GadgetsZone.showNotification("Please agree to the terms and conditions.", "error");
+                return;
+            }
+
+            // Simulate order placement
+            const originalText = this.innerHTML;
+            this.innerHTML = 
+                `<i class="icon-loader"></i> ${GadgetsZone.trans("checkout.placing_order")}`;
+            this.disabled = true;
+
+            setTimeout(() => {
+                window.location.href = "/thank-you"; // Redirect to thank you page
+            }, 2000);
+        });
+    }
+
+    function updateReviewSummary() {
+        // Shipping Address
+        const firstName = document.getElementById("first-name")?.value || "";
+        const lastName = document.getElementById("last-name")?.value || "";
+        const address1 = document.getElementById("address-line1")?.value || "";
+        const address2 = document.getElementById("address-line2")?.value || "";
+        const city = document.getElementById("city")?.value || "";
+        const state = document.getElementById("state")?.value || "";
+        const zipCode = document.getElementById("zip-code")?.value || "";
+        const country = document.getElementById("country")?.options[document.getElementById("country").selectedIndex]?.text || "";
+        const email = document.getElementById("email")?.value || "";
+        const phone = document.getElementById("phone")?.value || "";
+
+        const reviewShippingAddress = document.getElementById("review-shipping-address");
+        if (reviewShippingAddress) {
+            reviewShippingAddress.innerHTML = `
+                ${firstName} ${lastName}<br>
+                ${address1}<br>
+                ${address2 ? address2 + "<br>" : ""}
+                ${city}, ${state} ${zipCode}<br>
+                ${country}<br>
+                ${email}<br>
+                ${phone}
+            `;
+        }
+
+        // Shipping Method
+        const selectedShippingMethod = document.querySelector("input[name=\"shipping_method\"]:checked");
+        const reviewShippingMethod = document.getElementById("review-shipping-method");
+        if (reviewShippingMethod && selectedShippingMethod) {
+            reviewShippingMethod.textContent = selectedShippingMethod.nextElementSibling.querySelector(".method-name").textContent;
+        }
+
+        // Payment Method
+        const selectedPaymentMethod = document.querySelector("input[name=\"payment_method\"]:checked");
+        const reviewPaymentMethod = document.getElementById("review-payment-method");
+        if (reviewPaymentMethod && selectedPaymentMethod) {
+            reviewPaymentMethod.textContent = selectedPaymentMethod.nextElementSibling.querySelector(".method-name").textContent;
+        }
+
+        // Order Items (simplified, ideally fetched from cart data)
+        const reviewItemsList = document.querySelector(".review-items-list");
+        const checkoutItemsPreview = document.querySelector(".checkout-items-preview");
+        if (reviewItemsList && checkoutItemsPreview) {
+            reviewItemsList.innerHTML = checkoutItemsPreview.innerHTML;
+        }
+
+        // Update Order Summary in Review Step
+        const subtotal = parseFloat(document.getElementById("order-summary-subtotal")?.textContent.replace(/[^\d.]/g, "")) || 0;
+        const discount = parseFloat(document.getElementById("order-summary-discount")?.textContent.replace(/[^\d.]/g, "")) || 0;
+        const shipping = parseFloat(document.getElementById("order-summary-shipping")?.textContent.replace(/[^\d.]/g, "")) || 0;
+        const tax = parseFloat(document.getElementById("order-summary-tax")?.textContent.replace(/[^\d.]/g, "")) || 0;
+        const total = parseFloat(document.getElementById("order-summary-total")?.textContent.replace(/[^\d.]/g, "")) || 0;
+
+        document.getElementById("review-subtotal").textContent = GadgetsZone.formatCurrency(subtotal);
+        document.getElementById("review-discount").textContent = "-" + GadgetsZone.formatCurrency(discount);
+        document.getElementById("review-shipping").textContent = GadgetsZone.formatCurrency(shipping);
+        document.getElementById("review-tax").textContent = GadgetsZone.formatCurrency(tax);
+        document.getElementById("review-total").textContent = GadgetsZone.formatCurrency(total);
+    }
+
+    // Add invalid class on blur if field is required and empty
+    document.querySelectorAll("input[required], select[required], textarea[required]").forEach(input => {
+        input.addEventListener("blur", function() {
+            if (!this.value.trim()) {
+                this.classList.add("is-invalid");
+            } else {
+                this.classList.remove("is-invalid");
+            }
+        });
+        input.addEventListener("input", function() {
+            if (this.classList.contains("is-invalid") && this.value.trim()) {
+                this.classList.remove("is-invalid");
+            }
+        });
+    });
+
+    // Global GadgetsZone object for utility functions (assuming it's defined in master.twig or similar)
+    if (typeof GadgetsZone === "undefined") {
+        window.GadgetsZone = {
+            showNotification: function(message, type = "success") {
+                console.log(`Notification (${type}): ${message}`);
+                // Implement actual notification display here (e.g., a toast message)
+                const notification = document.createElement("div");
+                notification.className = `cart-notification show ${type}`;
+                notification.innerHTML = `
+                    <div class="notification-content">
+                        <i class="notification-icon icon-${type === "error" ? "x-circle" : "check-circle"}"></i>
+                        <span class="notification-message">${message}</span>
+                    </div>
+                `;
+                document.body.appendChild(notification);
+                setTimeout(() => {
+                    notification.classList.remove("show");
+                    notification.addEventListener("transitionend", () => notification.remove());
+                }, 3000);
+            },
+            formatCurrency: function(amount) {
+                return new Intl.NumberFormat("en-US", {
+                    style: "currency",
+                    currency: "USD"
+                }).format(amount);
+            },
+            trans: function(key, params = {}) {
+                // This is a placeholder. In a real Salla theme, this would use Salla's translation system.
+                const translations = {
+                    "checkout.checkout": "Checkout",
+                    "checkout.checkout_description": "Securely complete your purchase.",
+                    "checkout.secure_payment": "Your secure payment gateway.",
+                    "checkout.shipping_address": "Shipping Address",
+                    "checkout.shipping_method": "Shipping Method",
+                    "checkout.payment_method": "Payment Method",
+                    "checkout.review_order": "Review Order",
+                    "checkout.first_name": "First Name",
+                    "checkout.last_name": "Last Name",
+                    "checkout.email": "Email",
+                    "checkout.phone": "Phone",
+                    "checkout.country": "Country",
+                    "checkout.select_country": "Select a country",
+                    "checkout.address_line1": "Address Line 1",
+                    "checkout.address_line2": "Address Line 2 (Optional)",
+                    "checkout.city": "City",
+                    "checkout.state_province": "State/Province",
+                    "checkout.zip_code": "Zip/Postal Code",
+                    "checkout.save_address": "Save this address for future purchases",
+                    "checkout.continue_to_shipping": "Continue to Shipping",
+                    "checkout.standard_shipping": "Standard Shipping",
+                    "checkout.free": "Free",
+                    "checkout.delivery_time": "Delivery in {days} business days",
+                    "checkout.express_shipping": "Express Shipping",
+                    "checkout.store_pickup": "Store Pickup",
+                    "checkout.pickup_time": "Ready for pickup in 24 hours",
+                    "checkout.back_to_address": "Back to Address",
+                    "checkout.continue_to_payment": "Continue to Payment",
+                    "checkout.credit_debit_card": "Credit / Debit Card",
+                    "checkout.card_number": "Card Number",
+                    "checkout.expiry_date": "Expiry Date",
+                    "checkout.cvv": "CVV",
+                    "checkout.name_on_card": "Name on Card",
+                    "checkout.cash_on_delivery": "Cash on Delivery",
+                    "checkout.back_to_shipping": "Back to Shipping",
+                    "checkout.shipping_details": "Shipping Details",
+                    "checkout.payment_details": "Payment Details",
+                    "checkout.items_in_order": "Items in Order",
+                    "checkout.agree_to_terms": "I agree to the",
+                    "checkout.place_order": "Place Order",
+                    "checkout.placing_order": "Placing Order",
+                    "common.home": "Home",
+                    "common.edit": "Edit",
+                    "common.terms_conditions": "Terms & Conditions",
+                    "cart.shopping_cart": "Shopping Cart",
+                    "cart.subtotal": "Subtotal",
+                    "cart.discount": "Discount",
+                    "cart.shipping": "Shipping",
+                    "cart.tax": "Tax",
+                    "cart.total": "Total",
+                    // Add other translations as needed
+                };
+                let translated = translations[key] || key;
+                for (const param in params) {
+                    translated = translated.replace(`{${param}}`, params[param]);
+                }
+                return translated;
+            }
+        };
+    }
+});
+</script>
+{% endblock %}
+
