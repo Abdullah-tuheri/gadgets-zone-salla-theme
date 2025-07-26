@@ -1,0 +1,619 @@
+{# Header Component for Gadgets Zone Theme #}
+
+{# Top Header Bar #}
+<div class="header-top d-none d-md-block">
+    <div class="container">
+        <div class="d-flex justify-between align-center">
+            <div class="header-top-left">
+                <span class="header-top-item">
+                    <i class="icon-truck"></i>
+                    {{ trans('header.free_shipping') }}
+                </span>
+                <span class="header-top-item">
+                    <i class="icon-headphones"></i>
+                    {{ trans('header.customer_service') }}
+                </span>
+            </div>
+            <div class="header-top-right">
+                <span class="header-top-item">
+                    <i class="icon-shield"></i>
+                    {{ trans('header.secure_payment') }}
+                </span>
+                {# Language Switcher #}
+                {% if store.locales|length > 1 %}
+                <div class="language-switcher">
+                    <salla-localization-modal></salla-localization-modal>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+{# Main Header #}
+<div class="header-main">
+    <div class="container">
+        <nav class="header-nav">
+            {# Logo #}
+            <div class="site-logo">
+                <a href="{{ store.url }}" title="{{ store.name }}">
+                    {% if store.logo %}
+                        <img src="{{ store.logo }}" alt="{{ store.name }}" class="logo-image">
+                    {% else %}
+                        <span class="logo-text">{{ store.name }}</span>
+                    {% endif %}
+                </a>
+            </div>
+
+            {# Main Navigation - Desktop #}
+            <ul class="main-navigation d-none d-lg-flex">
+                <li>
+                    <a href="{{ store.url }}" class="{{ app.request.route == 'home' ? 'active' : '' }}">
+                        {{ trans('common.home') }}
+                    </a>
+                </li>
+                
+                {# Categories Menu #}
+                {% if store.categories %}
+                <li class="nav-dropdown">
+                    <a href="{{ store.url }}/categories" class="dropdown-toggle">
+                        {{ trans('common.categories') }}
+                        <i class="icon-chevron-down"></i>
+                    </a>
+                    <div class="dropdown-menu">
+                        <div class="dropdown-content">
+                            {% for category in store.categories %}
+                                <div class="dropdown-column">
+                                    <a href="{{ category.url }}" class="dropdown-header">
+                                        {{ category.name }}
+                                    </a>
+                                    {% if category.children %}
+                                        {% for subcategory in category.children %}
+                                            <a href="{{ subcategory.url }}" class="dropdown-item">
+                                                {{ subcategory.name }}
+                                            </a>
+                                        {% endfor %}
+                                    {% endif %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </li>
+                {% endif %}
+                
+                {# Static Pages #}
+                <li>
+                    <a href="{{ store.url }}/about" class="{{ app.request.route == 'about' ? 'active' : '' }}">
+                        {{ trans('common.about') }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ store.url }}/contact" class="{{ app.request.route == 'contact' ? 'active' : '' }}">
+                        {{ trans('common.contact') }}
+                    </a>
+                </li>
+                <li>
+                    <a href="{{ store.url }}/support" class="{{ app.request.route == 'support' ? 'active' : '' }}">
+                        {{ trans('common.support') }}
+                    </a>
+                </li>
+            </ul>
+
+            {# Search Bar - Desktop #}
+            <div class="search-container d-none d-md-block">
+                <form action="{{ store.url }}/search" method="GET" class="search-form">
+                    <div class="search-input-group">
+                        <i class="search-icon icon-search"></i>
+                        <input 
+                            type="text" 
+                            name="q" 
+                            class="search-input" 
+                            placeholder="{{ trans('common.search_placeholder') }}"
+                            value="{{ app.request.get('q') }}"
+                            autocomplete="off"
+                        >
+                        <button type="submit" class="search-submit">
+                            <i class="icon-search"></i>
+                        </button>
+                    </div>
+                </form>
+                
+                {# Search Suggestions (if enabled) #}
+                <div class="search-suggestions" id="search-suggestions">
+                    <salla-search-suggestions></salla-search-suggestions>
+                </div>
+            </div>
+
+            {# Header Actions #}
+            <div class="header-actions">
+                {# Search Toggle - Mobile #}
+                <button class="search-toggle d-md-none" type="button" aria-label="{{ trans('common.search') }}">
+                    <i class="icon-search"></i>
+                </button>
+
+                {# User Account #}
+                <div class="user-account">
+                    {% if user.is_logged %}
+                        <div class="user-dropdown">
+                            <button class="user-toggle" type="button" aria-label="{{ trans('common.account') }}">
+                                <i class="icon-user"></i>
+                            </button>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <a href="{{ store.url }}/customer/profile" class="dropdown-item">
+                                    <i class="icon-user"></i>
+                                    {{ trans('common.account') }}
+                                </a>
+                                <a href="{{ store.url }}/customer/orders" class="dropdown-item">
+                                    <i class="icon-package"></i>
+                                    {{ trans('customer.orders') }}
+                                </a>
+                                <a href="{{ store.url }}/customer/wishlist" class="dropdown-item">
+                                    <i class="icon-heart"></i>
+                                    {{ trans('customer.wishlist') }}
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="{{ store.url }}/customer/logout" class="dropdown-item">
+                                    <i class="icon-log-out"></i>
+                                    {{ trans('common.logout') }}
+                                </a>
+                            </div>
+                        </div>
+                    {% else %}
+                        <a href="{{ store.url }}/customer/login" class="user-login" aria-label="{{ trans('common.login') }}">
+                            <i class="icon-user"></i>
+                            <span class="d-none d-lg-inline">{{ trans('common.login') }}</span>
+                        </a>
+                    {% endif %}
+                </div>
+
+                {# Wishlist #}
+                {% if user.is_logged %}
+                <a href="{{ store.url }}/customer/wishlist" class="wishlist-toggle" aria-label="{{ trans('customer.wishlist') }}">
+                    <i class="icon-heart"></i>
+                    <span class="wishlist-count" data-count="{{ user.wishlist_count }}">{{ user.wishlist_count }}</span>
+                </a>
+                {% endif %}
+
+                {# Shopping Cart #}
+                <div class="cart-container">
+                    <button class="cart-toggle" type="button" aria-label="{{ trans('common.cart') }}">
+                        <i class="icon-shopping-bag"></i>
+                        <span class="cart-count" data-count="{{ cart.items_count }}">{{ cart.items_count }}</span>
+                    </button>
+                    
+                    {# Mini Cart Dropdown #}
+                    <div class="cart-dropdown">
+                        <div class="cart-dropdown-header">
+                            <h4>{{ trans('common.cart') }}</h4>
+                            <span class="cart-items-count">{{ cart.items_count }} {{ trans('common.items') }}</span>
+                        </div>
+                        <div class="cart-dropdown-body">
+                            {% if cart.items %}
+                                <div class="cart-items">
+                                    {% for item in cart.items %}
+                                        <div class="cart-item">
+                                            <div class="cart-item-image">
+                                                <img src="{{ item.product.image }}" alt="{{ item.product.name }}">
+                                            </div>
+                                            <div class="cart-item-details">
+                                                <h5 class="cart-item-name">{{ item.product.name }}</h5>
+                                                <div class="cart-item-price">
+                                                    {{ item.quantity }} × {{ item.price|currency }}
+                                                </div>
+                                            </div>
+                                            <button class="cart-item-remove" data-item-id="{{ item.id }}">
+                                                <i class="icon-x"></i>
+                                            </button>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                                <div class="cart-dropdown-footer">
+                                    <div class="cart-total">
+                                        <strong>{{ trans('common.total') }}: {{ cart.total|currency }}</strong>
+                                    </div>
+                                    <div class="cart-actions">
+                                        <a href="{{ store.url }}/cart" class="btn btn-secondary btn-small">
+                                            {{ trans('common.view_cart') }}
+                                        </a>
+                                        <a href="{{ store.url }}/checkout" class="btn btn-primary btn-small">
+                                            {{ trans('common.checkout') }}
+                                        </a>
+                                    </div>
+                                </div>
+                            {% else %}
+                                <div class="cart-empty">
+                                    <i class="icon-shopping-bag cart-empty-icon"></i>
+                                    <p>{{ trans('cart.empty_message') }}</p>
+                                    <a href="{{ store.url }}" class="btn btn-primary btn-small">
+                                        {{ trans('common.continue_shopping') }}
+                                    </a>
+                                </div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                {# Mobile Menu Toggle #}
+                <button class="mobile-menu-toggle d-lg-none" type="button" aria-label="{{ trans('common.menu') }}">
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                    <span class="hamburger-line"></span>
+                </button>
+            </div>
+        </nav>
+    </div>
+</div>
+
+{# Mobile Search Bar #}
+<div class="mobile-search d-md-none">
+    <div class="container">
+        <form action="{{ store.url }}/search" method="GET" class="search-form">
+            <div class="search-input-group">
+                <i class="search-icon icon-search"></i>
+                <input 
+                    type="text" 
+                    name="q" 
+                    class="search-input" 
+                    placeholder="{{ trans('common.search_placeholder') }}"
+                    value="{{ app.request.get('q') }}"
+                >
+                <button type="submit" class="search-submit">
+                    {{ trans('common.search') }}
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+{# Mobile Menu #}
+<div class="mobile-menu d-lg-none">
+    <div class="mobile-menu-header">
+        <h3>{{ trans('common.menu') }}</h3>
+        <button class="mobile-menu-close" type="button" aria-label="{{ trans('common.close') }}">
+            <i class="icon-x"></i>
+        </button>
+    </div>
+    
+    <div class="mobile-menu-body">
+        {# User Account - Mobile #}
+        {% if user.is_logged %}
+        <div class="mobile-user-info">
+            <div class="mobile-user-avatar">
+                <i class="icon-user"></i>
+            </div>
+            <div class="mobile-user-details">
+                <h4>{{ user.name }}</h4>
+                <p>{{ user.email }}</p>
+            </div>
+        </div>
+        {% else %}
+        <div class="mobile-auth-buttons">
+            <a href="{{ store.url }}/customer/login" class="btn btn-primary btn-block">
+                {{ trans('common.login') }}
+            </a>
+            <a href="{{ store.url }}/customer/register" class="btn btn-secondary btn-block">
+                {{ trans('common.register') }}
+            </a>
+        </div>
+        {% endif %}
+        
+        {# Mobile Navigation #}
+        <ul class="mobile-navigation">
+            <li>
+                <a href="{{ store.url }}">
+                    <i class="icon-home"></i>
+                    {{ trans('common.home') }}
+                </a>
+            </li>
+            
+            {# Categories #}
+            {% if store.categories %}
+                {% for category in store.categories %}
+                <li class="mobile-nav-dropdown">
+                    <a href="{{ category.url }}" class="mobile-nav-link">
+                        <i class="icon-grid"></i>
+                        {{ category.name }}
+                    </a>
+                    {% if category.children %}
+                        <button class="mobile-nav-toggle" type="button">
+                            <i class="icon-chevron-down"></i>
+                        </button>
+                        <ul class="mobile-nav-submenu">
+                            {% for subcategory in category.children %}
+                                <li>
+                                    <a href="{{ subcategory.url }}">{{ subcategory.name }}</a>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% endif %}
+                </li>
+                {% endfor %}
+            {% endif %}
+            
+            <li>
+                <a href="{{ store.url }}/about">
+                    <i class="icon-info"></i>
+                    {{ trans('common.about') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ store.url }}/contact">
+                    <i class="icon-phone"></i>
+                    {{ trans('common.contact') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ store.url }}/support">
+                    <i class="icon-help-circle"></i>
+                    {{ trans('common.support') }}
+                </a>
+            </li>
+            
+            {% if user.is_logged %}
+            <li class="mobile-nav-divider"></li>
+            <li>
+                <a href="{{ store.url }}/customer/profile">
+                    <i class="icon-user"></i>
+                    {{ trans('common.account') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ store.url }}/customer/orders">
+                    <i class="icon-package"></i>
+                    {{ trans('customer.orders') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ store.url }}/customer/wishlist">
+                    <i class="icon-heart"></i>
+                    {{ trans('customer.wishlist') }}
+                </a>
+            </li>
+            <li>
+                <a href="{{ store.url }}/customer/logout">
+                    <i class="icon-log-out"></i>
+                    {{ trans('common.logout') }}
+                </a>
+            </li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+
+{# Header Styles #}
+<style>
+/* Header Top Styles */
+.header-top {
+    background: var(--primary-color);
+    color: white;
+    padding: 0.5rem 0;
+    font-size: 0.875rem;
+}
+
+.header-top-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-right: 2rem;
+}
+
+.header-top-item:last-child {
+    margin-right: 0;
+}
+
+/* Mobile Menu Hamburger Animation */
+.mobile-menu-toggle {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    width: 30px;
+    height: 30px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    padding: 0;
+}
+
+.hamburger-line {
+    width: 100%;
+    height: 2px;
+    background: var(--text-color);
+    margin: 2px 0;
+    transition: var(--transition);
+}
+
+.mobile-menu.active ~ .mobile-menu-toggle .hamburger-line:nth-child(1) {
+    transform: rotate(45deg) translate(5px, 5px);
+}
+
+.mobile-menu.active ~ .mobile-menu-toggle .hamburger-line:nth-child(2) {
+    opacity: 0;
+}
+
+.mobile-menu.active ~ .mobile-menu-toggle .hamburger-line:nth-child(3) {
+    transform: rotate(-45deg) translate(7px, -6px);
+}
+
+/* Cart Dropdown */
+.cart-dropdown {
+    position: absolute;
+    top: 100%;
+    right: 0;
+    width: 350px;
+    background: white;
+    box-shadow: var(--shadow-heavy);
+    border-radius: var(--border-radius);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: var(--transition);
+    z-index: 1000;
+}
+
+.cart-container:hover .cart-dropdown {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.cart-dropdown-header {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.cart-dropdown-body {
+    max-height: 400px;
+    overflow-y: auto;
+}
+
+.cart-item {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.cart-item-image {
+    width: 50px;
+    height: 50px;
+    flex-shrink: 0;
+}
+
+.cart-item-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: var(--border-radius-small);
+}
+
+.cart-item-details {
+    flex: 1;
+}
+
+.cart-item-name {
+    font-size: 0.875rem;
+    font-weight: var(--font-weight-medium);
+    margin-bottom: 0.25rem;
+    line-height: 1.3;
+}
+
+.cart-item-price {
+    font-size: 0.875rem;
+    color: var(--text-light);
+}
+
+.cart-item-remove {
+    background: none;
+    border: none;
+    color: var(--text-muted);
+    cursor: pointer;
+    padding: 0.25rem;
+    border-radius: var(--border-radius-small);
+    transition: var(--transition);
+}
+
+.cart-item-remove:hover {
+    color: #dc3545;
+    background: rgba(220, 53, 69, 0.1);
+}
+
+.cart-dropdown-footer {
+    padding: 1rem;
+    border-top: 1px solid var(--border-color);
+}
+
+.cart-total {
+    margin-bottom: 1rem;
+    text-align: center;
+}
+
+.cart-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.5rem;
+}
+
+.cart-empty {
+    padding: 2rem;
+    text-align: center;
+}
+
+.cart-empty-icon {
+    font-size: 3rem;
+    color: var(--text-muted);
+    margin-bottom: 1rem;
+}
+
+/* Mobile Search */
+.mobile-search {
+    background: var(--background-light);
+    padding: 1rem 0;
+    border-bottom: 1px solid var(--border-color);
+    display: none;
+}
+
+.mobile-search.active {
+    display: block;
+}
+
+/* Dropdown Menus */
+.nav-dropdown {
+    position: relative;
+}
+
+.dropdown-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    min-width: 200px;
+    background: white;
+    box-shadow: var(--shadow-heavy);
+    border-radius: var(--border-radius);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-10px);
+    transition: var(--transition);
+    z-index: 1000;
+}
+
+.nav-dropdown:hover .dropdown-menu {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-content {
+    padding: 1rem;
+}
+
+.dropdown-header {
+    font-weight: var(--font-weight-semibold);
+    color: var(--primary-color);
+    margin-bottom: 0.5rem;
+    display: block;
+    text-decoration: none;
+}
+
+.dropdown-item {
+    display: block;
+    padding: 0.5rem 0;
+    color: var(--text-color);
+    text-decoration: none;
+    transition: var(--transition);
+}
+
+.dropdown-item:hover {
+    color: var(--primary-color);
+}
+
+.dropdown-divider {
+    height: 1px;
+    background: var(--border-color);
+    margin: 0.5rem 0;
+}
+</style>
+

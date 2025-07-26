@@ -1,0 +1,46 @@
+{
+  "name": "Gadgets Zone Theme",
+  "version": "1.0.0",
+  "description": "A modern e-commerce theme inspired by GadgetsZone, featuring clean design and excellent user experience for electronics stores",
+  "author": {
+    "name": "Manus AI",
+    "email": "support@manus.computer"
+  },
+  "preview": {
+    "desktop": "preview-desktop.png",
+    "mobile": "preview-mobile.png"
+  },
+  "support": {
+    "email": "support@manus.computer",
+    "url": "https://manus.computer/support"
+  },
+  "tags": [
+    "electronics",
+    "modern",
+    "responsive",
+    "clean",
+    "e-commerce"
+  ],
+  "settings": {
+    "colors": {
+      "primary": "#FF8C00",
+      "secondary": "#FFFFFF",
+      "accent": "#FFA500",
+      "text": "#333333",
+      "background": "#FFFFFF"
+    },
+    "typography": {
+      "font_family": "Inter, system-ui, sans-serif",
+      "heading_font": "Inter, system-ui, sans-serif"
+    },
+    "layout": {
+      "container_width": "1200px",
+      "sidebar_width": "300px"
+    }
+  },
+  "compatibility": {
+    "salla_version": ">=2.0.0",
+    "twilight_version": ">=3.0.0"
+  }
+}
+

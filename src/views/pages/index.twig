@@ -1,0 +1,855 @@
+{# Homepage Template for Gadgets Zone Theme #}
+
+{% extends "layouts.master" %}
+
+{% block title %}{{ store.name }} - {{ trans('hero.title') }}{% endblock %}
+
+{% block description %}{{ trans('hero.subtitle') }}{% endblock %}
+
+{% block body_class %}homepage{% endblock %}
+
+{% block content %}
+
+{# Hero Section #}
+<section class="hero-section">
+    <div class="container">
+        <div class="hero-content fade-in">
+            <h1 class="hero-title">{{ trans('hero.title') }}</h1>
+            <p class="hero-subtitle">{{ trans('hero.subtitle') }}</p>
+            <a href="#featured-products" class="hero-cta">
+                {{ trans('hero.cta') }}
+                <i class="icon-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+    
+    {# Hero Background Pattern #}
+    <div class="hero-pattern">
+        <div class="hero-shape hero-shape-1"></div>
+        <div class="hero-shape hero-shape-2"></div>
+        <div class="hero-shape hero-shape-3"></div>
+    </div>
+</section>
+
+{# Features Section #}
+<section class="features-section">
+    <div class="container">
+        <div class="features-grid slide-up">
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="icon-truck"></i>
+                </div>
+                <h3 class="feature-title">{{ trans('features.free_shipping.title') }}</h3>
+                <p class="feature-description">{{ trans('features.free_shipping.description') }}</p>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="icon-headphones"></i>
+                </div>
+                <h3 class="feature-title">{{ trans('features.support.title') }}</h3>
+                <p class="feature-description">{{ trans('features.support.description') }}</p>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="icon-refresh-cw"></i>
+                </div>
+                <h3 class="feature-title">{{ trans('features.return.title') }}</h3>
+                <p class="feature-description">{{ trans('features.return.description') }}</p>
+            </div>
+            
+            <div class="feature-item">
+                <div class="feature-icon">
+                    <i class="icon-shield"></i>
+                </div>
+                <h3 class="feature-title">{{ trans('features.secure.title') }}</h3>
+                <p class="feature-description">{{ trans('features.secure.description') }}</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Featured Products Section #}
+<section id="featured-products" class="featured-products-section">
+    <div class="container">
+        <div class="section-header text-center mb-4">
+            <h2 class="section-title">{{ trans('product.featured_products') }}</h2>
+            <p class="section-subtitle">{{ trans('product.featured_description') }}</p>
+        </div>
+        
+        {# Product Filter Tabs #}
+        <div class="product-filter-tabs">
+            <div class="filter-tabs">
+                <button class="filter-tab active" data-filter="all">
+                    {{ trans('common.all') }}
+                </button>
+                <button class="filter-tab" data-filter="bestsellers">
+                    {{ trans('product.bestsellers') }}
+                </button>
+                <button class="filter-tab" data-filter="new">
+                    {{ trans('product.new_arrivals') }}
+                </button>
+                <button class="filter-tab" data-filter="sale">
+                    {{ trans('product.on_sale') }}
+                </button>
+            </div>
+        </div>
+        
+        {# Featured Products Grid #}
+        <div class="products-grid" id="featured-products-grid">
+            {% if products %}
+                {% for product in products|slice(0, 8) %}
+                    {% include 'partials.product.card' with {'product': product} %}
+                {% endfor %}
+            {% else %}
+                {# Fallback products for demo #}
+                {% set demo_products = [
+                    {
+                        'id': 1,
+                        'name': 'Beatle Bands',
+                        'price': 299.00,
+                        'original_price': 349.00,
+                        'image': '/images/beatle-bands.jpg',
+                        'rating': 4.5,
+                        'reviews_count': 124,
+                        'colors': ['#000000', '#FFFFFF', '#FF0000'],
+                        'badges': ['bestseller'],
+                        'url': '/product/beatle-bands'
+                    },
+                    {
+                        'id': 2,
+                        'name': 'Black Bearded Beast',
+                        'price': 199.00,
+                        'image': '/images/black-bearded-beast.jpg',
+                        'rating': 4.8,
+                        'reviews_count': 89,
+                        'colors': ['#000000', '#333333'],
+                        'badges': ['new'],
+                        'url': '/product/black-bearded-beast'
+                    },
+                    {
+                        'id': 3,
+                        'name': 'Black Buds',
+                        'price': 149.00,
+                        'original_price': 199.00,
+                        'image': '/images/black-buds.jpg',
+                        'rating': 4.3,
+                        'reviews_count': 67,
+                        'colors': ['#000000', '#FFFFFF', '#0066CC'],
+                        'badges': ['sale'],
+                        'url': '/product/black-buds'
+                    },
+                    {
+                        'id': 4,
+                        'name': 'Blue Ninja Headphone',
+                        'price': 399.00,
+                        'image': '/images/blue-ninja-headphone.jpg',
+                        'rating': 4.7,
+                        'reviews_count': 156,
+                        'colors': ['#0066CC', '#000000', '#FFFFFF'],
+                        'badges': [],
+                        'url': '/product/blue-ninja-headphone'
+                    },
+                    {
+                        'id': 5,
+                        'name': 'Classic Commander Headphone',
+                        'price': 249.00,
+                        'image': '/images/classic-commander-headphone.jpg',
+                        'rating': 4.4,
+                        'reviews_count': 93,
+                        'colors': ['#8B4513', '#000000'],
+                        'badges': [],
+                        'url': '/product/classic-commander-headphone'
+                    },
+                    {
+                        'id': 6,
+                        'name': 'Funky Buds',
+                        'price': 129.00,
+                        'original_price': 159.00,
+                        'image': '/images/funky-buds.jpg',
+                        'rating': 4.2,
+                        'reviews_count': 78,
+                        'colors': ['#FF69B4', '#00FF00', '#FFFF00'],
+                        'badges': ['sale'],
+                        'url': '/product/funky-buds'
+                    },
+                    {
+                        'id': 7,
+                        'name': 'Skull Boi Headphone',
+                        'price': 179.00,
+                        'image': '/images/skull-boi-headphone.jpg',
+                        'rating': 4.6,
+                        'reviews_count': 112,
+                        'colors': ['#000000', '#FFFFFF'],
+                        'badges': ['bestseller'],
+                        'url': '/product/skull-boi-headphone'
+                    },
+                    {
+                        'id': 8,
+                        'name': 'Sony Wired Headphone, Black',
+                        'price': 89.00,
+                        'image': '/images/sony-wired-headphone-black.jpg',
+                        'rating': 4.1,
+                        'reviews_count': 234,
+                        'colors': ['#000000'],
+                        'badges': [],
+                        'url': '/product/sony-wired-headphone-black'
+                    }
+                ] %}
+                
+                {% for product in demo_products %}
+                    {% include 'partials.product.card' with {'product': product} %}
+                {% endfor %}
+            {% endif %}
+        </div>
+        
+        {# View All Products Button #}
+        <div class="text-center mt-4">
+            <a href="{{ store.url }}/products" class="btn btn-secondary btn-large">
+                {{ trans('product.view_all_products') }}
+                <i class="icon-arrow-right"></i>
+            </a>
+        </div>
+    </div>
+</section>
+
+{# Categories Section #}
+{% if store.categories %}
+<section class="categories-section">
+    <div class="container">
+        <div class="section-header text-center mb-4">
+            <h2 class="section-title">{{ trans('common.shop_by_category') }}</h2>
+            <p class="section-subtitle">{{ trans('common.category_description') }}</p>
+        </div>
+        
+        <div class="categories-grid">
+            {% for category in store.categories|slice(0, 6) %}
+                <div class="category-card hover-scale">
+                    <a href="{{ category.url }}" class="category-link">
+                        <div class="category-image">
+                            {% if category.image %}
+                                <img src="{{ category.image }}" alt="{{ category.name }}" loading="lazy">
+                            {% else %}
+                                <div class="category-placeholder">
+                                    <i class="icon-grid"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+                        <div class="category-content">
+                            <h3 class="category-name">{{ category.name }}</h3>
+                            <p class="category-count">{{ category.products_count }} {{ trans('common.products') }}</p>
+                        </div>
+                    </a>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+</section>
+{% endif %}
+
+{# Newsletter Section #}
+<section class="newsletter-section">
+    <div class="container">
+        <div class="newsletter-content">
+            <div class="newsletter-text">
+                <h2 class="newsletter-title">{{ trans('footer.newsletter') }}</h2>
+                <p class="newsletter-description">{{ trans('footer.newsletter_text') }}</p>
+            </div>
+            <div class="newsletter-form">
+                <form action="{{ store.url }}/newsletter/subscribe" method="POST" class="newsletter-subscribe">
+                    <div class="newsletter-input-group">
+                        <input 
+                            type="email" 
+                            name="email" 
+                            class="newsletter-input" 
+                            placeholder="{{ trans('common.email_placeholder') }}"
+                            required
+                        >
+                        <button type="submit" class="newsletter-submit">
+                            {{ trans('footer.subscribe') }}
+                            <i class="icon-send"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# Testimonials Section #}
+<section class="testimonials-section">
+    <div class="container">
+        <div class="section-header text-center mb-4">
+            <h2 class="section-title">{{ trans('common.customer_reviews') }}</h2>
+            <p class="section-subtitle">{{ trans('common.reviews_description') }}</p>
+        </div>
+        
+        <div class="testimonials-slider">
+            <div class="testimonial-item">
+                <div class="testimonial-content">
+                    <div class="testimonial-rating">
+                        <div class="stars">
+                            <i class="icon-star star filled"></i>
+                            <i class="icon-star star filled"></i>
+                            <i class="icon-star star filled"></i>
+                            <i class="icon-star star filled"></i>
+                            <i class="icon-star star filled"></i>
+                        </div>
+                    </div>
+                    <blockquote class="testimonial-text">
+                        "Amazing quality headphones! The sound is crystal clear and the build quality is exceptional. Highly recommend!"
+                    </blockquote>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="/images/customer-1.jpg" alt="Sarah Johnson" loading="lazy">
+                        </div>
+                        <div class="author-info">
+                            <h4 class="author-name">Sarah Johnson</h4>
+                            <p class="author-title">Verified Buyer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-item">
+                <div class="testimonial-content">
+                    <div class="testimonial-rating">
+                        <div class="stars">
+                            <i class="icon-star star filled"></i>
+                            <i class="icon-star star filled"></i>
+                            <i class="icon-star star filled"></i>
+                            <i class="icon-star star filled"></i>
+                            <i class="icon-star star filled"></i>
+                        </div>
+                    </div>
+                    <blockquote class="testimonial-text">
+                        "Fast shipping and excellent customer service. The product exceeded my expectations!"
+                    </blockquote>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="/images/customer-2.jpg" alt="Mike Chen" loading="lazy">
+                        </div>
+                        <div class="author-info">
+                            <h4 class="author-name">Mike Chen</h4>
+                            <p class="author-title">Verified Buyer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="testimonial-item">
+                <div class="testimonial-content">
+                    <div class="testimonial-rating">
+                        <div class="stars">
+                            <i class="icon-star star filled"></i>
+                            <i class="icon-star star filled"></i>
+                            <i class="icon-star star filled"></i>
+                            <i class="icon-star star filled"></i>
+                            <i class="icon-star star filled"></i>
+                        </div>
+                    </div>
+                    <blockquote class="testimonial-text">
+                        "Great selection of products and competitive prices. Will definitely shop here again!"
+                    </blockquote>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            <img src="/images/customer-3.jpg" alt="Emma Davis" loading="lazy">
+                        </div>
+                        <div class="author-info">
+                            <h4 class="author-name">Emma Davis</h4>
+                            <p class="author-title">Verified Buyer</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock %}
+
+{% block styles %}
+<link rel="stylesheet" href="{{ 'assets/styles/components.css'|asset }}">
+<style>
+/* Homepage Specific Styles */
+
+/* Hero Section Enhancements */
+.hero-section {
+    position: relative;
+    min-height: 60vh;
+    display: flex;
+    align-items: center;
+    overflow: hidden;
+}
+
+.hero-pattern {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    pointer-events: none;
+}
+
+.hero-shape {
+    position: absolute;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.1);
+    animation: float 6s ease-in-out infinite;
+}
+
+.hero-shape-1 {
+    width: 200px;
+    height: 200px;
+    top: 10%;
+    right: 10%;
+    animation-delay: 0s;
+}
+
+.hero-shape-2 {
+    width: 150px;
+    height: 150px;
+    bottom: 20%;
+    left: 5%;
+    animation-delay: 2s;
+}
+
+.hero-shape-3 {
+    width: 100px;
+    height: 100px;
+    top: 50%;
+    right: 30%;
+    animation-delay: 4s;
+}
+
+@keyframes float {
+    0%, 100% { transform: translateY(0px); }
+    50% { transform: translateY(-20px); }
+}
+
+/* Product Filter Tabs */
+.product-filter-tabs {
+    margin-bottom: 3rem;
+}
+
+.filter-tabs {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.filter-tab {
+    padding: 0.75rem 1.5rem;
+    background: white;
+    border: 2px solid var(--border-color);
+    border-radius: var(--border-radius-large);
+    color: var(--text-color);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    transition: var(--transition);
+    text-transform: capitalize;
+}
+
+.filter-tab:hover,
+.filter-tab.active {
+    background: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+    transform: translateY(-2px);
+}
+
+/* Products Grid */
+.products-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 2rem;
+    margin-bottom: 3rem;
+}
+
+/* Categories Grid */
+.categories-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 2rem;
+}
+
+.category-card {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    overflow: hidden;
+    transition: var(--transition);
+}
+
+.category-card:hover {
+    box-shadow: var(--shadow-medium);
+    transform: translateY(-5px);
+}
+
+.category-link {
+    display: block;
+    text-decoration: none;
+    color: inherit;
+}
+
+.category-image {
+    aspect-ratio: 4/3;
+    overflow: hidden;
+    position: relative;
+}
+
+.category-image img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: var(--transition);
+}
+
+.category-card:hover .category-image img {
+    transform: scale(1.05);
+}
+
+.category-placeholder {
+    width: 100%;
+    height: 100%;
+    background: var(--background-light);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 3rem;
+    color: var(--text-muted);
+}
+
+.category-content {
+    padding: 1.5rem;
+    text-align: center;
+}
+
+.category-name {
+    font-size: 1.25rem;
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: 0.5rem;
+    color: var(--text-color);
+}
+
+.category-count {
+    color: var(--text-light);
+    font-size: 0.875rem;
+}
+
+/* Newsletter Section */
+.newsletter-section {
+    background: var(--primary-color);
+    color: white;
+    padding: 4rem 0;
+}
+
+.newsletter-content {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 3rem;
+    align-items: center;
+}
+
+.newsletter-title {
+    font-size: 2rem;
+    font-weight: var(--font-weight-bold);
+    margin-bottom: 1rem;
+    color: white;
+}
+
+.newsletter-description {
+    font-size: 1.125rem;
+    opacity: 0.9;
+    line-height: 1.6;
+}
+
+.newsletter-input-group {
+    display: flex;
+    gap: 0;
+    max-width: 400px;
+}
+
+.newsletter-input {
+    flex: 1;
+    padding: 1rem 1.5rem;
+    border: none;
+    border-radius: var(--border-radius-large) 0 0 var(--border-radius-large);
+    font-size: 1rem;
+}
+
+.newsletter-input:focus {
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.3);
+}
+
+.newsletter-submit {
+    padding: 1rem 1.5rem;
+    background: white;
+    color: var(--primary-color);
+    border: none;
+    border-radius: 0 var(--border-radius-large) var(--border-radius-large) 0;
+    font-weight: var(--font-weight-semibold);
+    cursor: pointer;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.newsletter-submit:hover {
+    background: var(--background-light);
+    transform: translateY(-1px);
+}
+
+/* Testimonials Section */
+.testimonials-section {
+    padding: 4rem 0;
+    background: var(--background-light);
+}
+
+.testimonials-slider {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 2rem;
+}
+
+.testimonial-item {
+    background: white;
+    border-radius: var(--border-radius);
+    box-shadow: var(--shadow-light);
+    overflow: hidden;
+}
+
+.testimonial-content {
+    padding: 2rem;
+}
+
+.testimonial-rating {
+    margin-bottom: 1rem;
+}
+
+.testimonial-text {
+    font-size: 1.125rem;
+    line-height: 1.6;
+    color: var(--text-color);
+    margin-bottom: 1.5rem;
+    font-style: italic;
+}
+
+.testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+}
+
+.author-avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.author-name {
+    font-weight: var(--font-weight-semibold);
+    margin-bottom: 0.25rem;
+    color: var(--text-color);
+}
+
+.author-title {
+    font-size: 0.875rem;
+    color: var(--text-light);
+}
+
+/* Section Headers */
+.section-header {
+    margin-bottom: 3rem;
+}
+
+.section-title {
+    font-size: 2.5rem;
+    font-weight: var(--font-weight-bold);
+    margin-bottom: 1rem;
+    color: var(--text-color);
+}
+
+.section-subtitle {
+    font-size: 1.125rem;
+    color: var(--text-light);
+    max-width: 600px;
+    margin: 0 auto;
+    line-height: 1.6;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .hero-title {
+        font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1rem;
+    }
+    
+    .newsletter-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+    
+    .newsletter-input-group {
+        margin: 0 auto;
+    }
+    
+    .section-title {
+        font-size: 2rem;
+    }
+    
+    .products-grid {
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 1.5rem;
+    }
+    
+    .categories-grid {
+        grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+        gap: 1rem;
+    }
+    
+    .filter-tabs {
+        justify-content: flex-start;
+        overflow-x: auto;
+        padding-bottom: 0.5rem;
+    }
+    
+    .filter-tab {
+        white-space: nowrap;
+        flex-shrink: 0;
+    }
+}
+
+@media (max-width: 576px) {
+    .hero-section {
+        min-height: 50vh;
+        padding: 2rem 0;
+    }
+    
+    .features-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+    }
+    
+    .testimonials-slider {
+        grid-template-columns: 1fr;
+    }
+    
+    .testimonial-content {
+        padding: 1.5rem;
+    }
+}
+</style>
+{% endblock %}
+
+{% block scripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Product filter functionality
+    const filterTabs = document.querySelectorAll('.filter-tab');
+    const productsGrid = document.getElementById('featured-products-grid');
+    
+    filterTabs.forEach(tab => {
+        tab.addEventListener('click', function() {
+            // Update active tab
+            filterTabs.forEach(t => t.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Filter products (this would typically make an AJAX request)
+            const filter = this.dataset.filter;
+            filterProducts(filter);
+        });
+    });
+    
+    function filterProducts(filter) {
+        const products = productsGrid.querySelectorAll('.product-card');
+        
+        products.forEach(product => {
+            if (filter === 'all') {
+                product.style.display = 'block';
+            } else {
+                const badges = product.dataset.badges ? product.dataset.badges.split(',') : [];
+                if (badges.includes(filter)) {
+                    product.style.display = 'block';
+                } else {
+                    product.style.display = 'none';
+                }
+            }
+        });
+    }
+    
+    // Newsletter form submission
+    const newsletterForm = document.querySelector('.newsletter-subscribe');
+    if (newsletterForm) {
+        newsletterForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const email = this.querySelector('input[name="email"]').value;
+            const submitBtn = this.querySelector('.newsletter-submit');
+            
+            // Show loading state
+            submitBtn.innerHTML = '<i class="icon-loader"></i> Subscribing...';
+            submitBtn.disabled = true;
+            
+            // Simulate API call (replace with actual implementation)
+            setTimeout(() => {
+                GadgetsZone.showNotification('Thank you for subscribing to our newsletter!', 'success');
+                this.reset();
+                submitBtn.innerHTML = 'Subscribe <i class="icon-send"></i>';
+                submitBtn.disabled = false;
+            }, 1000);
+        });
+    }
+    
+    // Smooth scroll for hero CTA
+    const heroCTA = document.querySelector('.hero-cta');
+    if (heroCTA) {
+        heroCTA.addEventListener('click', function(e) {
+            e.preventDefault();
+            const target = document.querySelector(this.getAttribute('href'));
+            if (target) {
+                target.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        });
+    }
+    
+    // Intersection Observer for animations
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animate-in');
+            }
+        });
+    }, observerOptions);
+    
+    // Observe elements for animation
+    document.querySelectorAll('.slide-up, .fade-in').forEach(el => {
+        observer.observe(el);
+    });
+});
+</script>
+{% endblock %}
+
